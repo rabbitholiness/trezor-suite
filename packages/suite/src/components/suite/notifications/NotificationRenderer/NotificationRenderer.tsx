@@ -419,11 +419,7 @@ export const NotificationRenderer = ({
                     notification={notification}
                     icon="arrowUp"
                     variant="success"
-                    message={
-                        notification.isInfiniteApproval
-                            ? 'TOAST_TX_APPROVED_MAX'
-                            : 'TOAST_TX_APPROVED'
-                    }
+                    message="TOAST_TX_APPROVED"
                     messageValues={{
                         amount: notification.formattedAmount,
                         tokenSymbol: notification.tokenSymbol,

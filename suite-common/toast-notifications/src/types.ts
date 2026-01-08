@@ -1,3 +1,5 @@
+import { type CSSProperties } from 'react';
+
 import { TranslationKey } from '@suite/intl';
 import { DesktopAppUpdateState, Protocol } from '@suite-common/suite-constants';
 import { TrezorDevice } from '@suite-common/suite-types';
@@ -11,6 +13,7 @@ export interface NotificationOptions {
     seen?: boolean;
     resolved?: boolean;
     autoClose?: number | false;
+    style?: CSSProperties;
 }
 
 type TransactionNotificationPayload = {

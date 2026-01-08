@@ -387,6 +387,9 @@ export const pushSendFormTransactionThunk = createThunk<
                         descriptor: selectedAccount.descriptor,
                         symbol: selectedAccount.symbol,
                         txid,
+                        style: {
+                            maxWidth: 'auto',
+                        },
                     }),
                 );
             } else {

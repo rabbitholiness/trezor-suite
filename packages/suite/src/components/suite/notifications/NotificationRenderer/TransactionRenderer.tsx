@@ -1,3 +1,5 @@
+import { Translation } from '@suite/intl';
+import { getDisplaySymbol } from '@suite-common/wallet-config';
 import {
     selectAccounts,
     selectBlockchainState,
@@ -15,6 +17,8 @@ import {
     getConfirmations,
     isStakeTypeTx,
 } from '@suite-common/wallet-utils';
+import { Column, Row } from '@trezor/components';
+import { CoinLogo } from '@trezor/product-components';
 
 import { openModal } from 'src/actions/suite/modalActions';
 import { goto } from 'src/actions/suite/routerActions';
@@ -38,8 +42,25 @@ type TransactionRendererProps = NotificationViewProps &
         | 'tx-revoked'
     >;
 
+const TransactionRendererContent = ({
+    notification,
+}: {
+    notification: TransactionRendererProps['notification'];
+}) => {
+    if (notification.type === 'tx-approved' && notification.isInfiniteApproval) {
+        return (
+            <Row display="inline-flex" gap={4} alignItems="baseline">
+                <Translation id="TR_APPROVE_AMOUNT_UNLIMITED" />
+                <span>{getDisplaySymbol(notification.symbol)}</span>
+            </Row>
+        );
+    }
+
+    return <HiddenPlaceholder>{notification.formattedAmount}</HiddenPlaceholder>;
+};
+
 export const TransactionRenderer = ({ render: View, ...props }: TransactionRendererProps) => {
-    const { symbol, descriptor, txid, formattedAmount, device } = props.notification;
+    const { symbol, descriptor, txid, device } = props.notification;
     const accounts = useSelector(selectAccounts);
     const transactions = useSelector(selectTransactions);
     const blockchain = useSelector(selectBlockchainState);
@@ -49,12 +70,11 @@ export const TransactionRenderer = ({ render: View, ...props }: TransactionRende
     const dispatch = useDispatch();
 
     const networkAccounts = findAccountsByNetwork(symbol, accounts);
-    const found = findAccountsByDescriptor(descriptor, networkAccounts);
+    const account = findAccountsByDescriptor(descriptor, networkAccounts).at(0);
 
     // fallback: account not found, it should never happen tho
-    if (!found.length) return <View {...props} />;
+    if (!account) return <View {...props} />;
 
-    const account = found[0];
     const accountTxs = getAccountTransactions(account.key, transactions);
     const tx = findTransaction(txid, accountTxs);
     const accountDevice = findAccountDevice(account, devices);
@@ -99,17 +119,32 @@ export const TransactionRenderer = ({ render: View, ...props }: TransactionRende
     return (
         <View
             {...props}
+            message="TOAST_TX_COMPOSED"
             messageValues={{
-                ...props.messageValues,
-                amount: <HiddenPlaceholder>{formattedAmount}</HiddenPlaceholder>,
-                account: (
-                    <AccountLabeling
-                        account={found}
-                        showAccountTypeBadge
-                        accountTypeBadgeSize="small"
-                    />
+                content: (
+                    <Column gap={4}>
+                        <Translation
+                            id={props.message}
+                            values={{
+                                ...props.messageValues,
+                                account: (
+                                    <Row display="inline-flex" alignItems="center">
+                                        <AccountLabeling
+                                            account={account}
+                                            showAccountTypeBadge
+                                            accountTypeBadgeSize="small"
+                                        />
+                                    </Row>
+                                ),
+                                confirmations,
+                            }}
+                        />
+                        <Row gap={8} alignItems="center">
+                            <CoinLogo symbol={symbol} size={20} />
+                            <TransactionRendererContent notification={props.notification} />
+                        </Row>
+                    </Column>
                 ),
-                confirmations,
             }}
             action={
                 tx && !isTradingRoute

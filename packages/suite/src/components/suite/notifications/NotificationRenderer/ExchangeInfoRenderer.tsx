@@ -1,5 +1,9 @@
+import { Translation } from '@suite/intl';
 import { selectTradingCoinSymbolByCryptoId } from '@suite-common/trading';
+import { getDisplaySymbol, getNetwork } from '@suite-common/wallet-config';
 import { selectAccountByKey } from '@suite-common/wallet-core';
+import { Column, Icon, Row } from '@trezor/components';
+import { AssetLogo } from '@trezor/product-components';
 
 import { HiddenPlaceholder } from 'src/components/suite/HiddenPlaceholder';
 import type { NotificationRendererProps } from 'src/components/suite/notifications/NotificationRenderer/NotificationRenderer';
@@ -22,6 +26,9 @@ export const ExchangeInfoRenderer = ({ render: View, ...props }: ExchangeInfoRen
         selectTradingCoinSymbolByCryptoId(state, receive.cryptoId),
     );
 
+    const sendNetwork = getNetwork(send.symbol);
+    const receiveNetwork = getNetwork(receive.symbol);
+
     const sendAccount = useSelector(state => selectAccountByKey(state, send.accountKey));
     const receiveAccount = useSelector(state => selectAccountByKey(state, receive.accountKey));
 
@@ -31,6 +38,7 @@ export const ExchangeInfoRenderer = ({ render: View, ...props }: ExchangeInfoRen
               accountType: sendAccount.accountType,
               symbol: sendAccount.symbol,
               index: sendAccount.index,
+              includeType: true,
           }))
         : undefined;
 
@@ -40,19 +48,53 @@ export const ExchangeInfoRenderer = ({ render: View, ...props }: ExchangeInfoRen
               accountType: receiveAccount.accountType,
               symbol: receiveAccount.symbol,
               index: receiveAccount.index,
+              includeType: true,
           }))
         : undefined;
 
     return (
         <View
             {...props}
+            message="TOAST_TX_COMPOSED"
             messageValues={{
-                sendAmount: <HiddenPlaceholder>{send.amount}</HiddenPlaceholder>,
-                sendAsset: sendSymbol,
-                sendAccount: sendAccountLabel,
-                receiveAmount: <HiddenPlaceholder>{receive.amount}</HiddenPlaceholder>,
-                receiveAsset: receiveSymbol,
-                receiveAccount: receiveAccountLabel,
+                content: (
+                    <Column gap={4}>
+                        <Translation
+                            id={props.message}
+                            values={{
+                                sendAmount: <HiddenPlaceholder>{send.amount}</HiddenPlaceholder>,
+                                sendAsset: send.symbol,
+                                sendAccount: sendAccountLabel,
+                                receiveAmount: (
+                                    <HiddenPlaceholder>{receive.amount}</HiddenPlaceholder>
+                                ),
+                                receiveAsset: receive.symbol,
+                                receiveAccount: receiveAccountLabel,
+                            }}
+                        />
+                        <Row gap={8} alignItems="center">
+                            <AssetLogo
+                                size={20}
+                                coingeckoId={sendNetwork.coingeckoId!}
+                                contractAddress={send.contractAddress}
+                                symbol={send.symbol}
+                                placeholder={getDisplaySymbol(sendSymbol || send.symbol)}
+                            />
+                            <HiddenPlaceholder>{send.amount}</HiddenPlaceholder>
+                            {getDisplaySymbol(sendSymbol || send.symbol)}
+                            <Icon name="arrowRight" variant="tertiary" size="mediumLarge" />
+                            <AssetLogo
+                                size={20}
+                                coingeckoId={receiveNetwork.coingeckoId!}
+                                contractAddress={receive.contractAddress}
+                                symbol={receive.symbol}
+                                placeholder={getDisplaySymbol(receiveSymbol || receive.symbol)}
+                            />
+                            <HiddenPlaceholder>{receive.amount}</HiddenPlaceholder>
+                            {getDisplaySymbol(receiveSymbol || receive.symbol)}
+                        </Row>
+                    </Column>
+                ),
             }}
         />
     );
