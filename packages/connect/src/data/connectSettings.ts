@@ -17,7 +17,6 @@ const initialSettings: ConnectSettings = {
     version: VERSION, // constant
     debug: false,
     priority: DEFAULT_PRIORITY,
-    connectSrc: DEFAULT_DOMAIN,
     popupSrc: `${DEFAULT_DOMAIN}popup.html`,
     transports: undefined,
     pendingTransportEvent: true,
@@ -83,13 +82,6 @@ export const parseConnectSettings = (input: Partial<ConnectSettings> = {}) => {
             settings.debug = input.debug === 'true';
         }
     }
-
-    if (typeof input.connectSrc === 'string') {
-        settings.connectSrc = corsValidator(input.connectSrc);
-    }
-
-    const src = settings.connectSrc || DEFAULT_DOMAIN;
-    settings.popupSrc = `${src}popup.html`;
 
     if (typeof input.transportReconnect === 'boolean') {
         settings.transportReconnect = input.transportReconnect;

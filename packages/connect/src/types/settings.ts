@@ -40,7 +40,6 @@ export type ConnectSettingsTransport =
 
 export interface ConnectSettingsPublic {
     manifest?: Manifest;
-    connectSrc?: string;
     debug?: boolean;
     transportReconnect?: boolean;
     transports?: ConnectSettingsTransport[];
@@ -81,6 +80,7 @@ export interface ConnectSettingsWebextension {
     coreMode?: 'auto' | 'suite-desktop' | 'suite-web';
 }
 export interface ConnectSettingsMobile {
+    connectSrc?: string;
     deeplinkUrl: string;
     deeplinkOpen?: (url: string) => void;
     deeplinkCallbackUrl?: string;
