@@ -1,4 +1,3 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
@@ -13,11 +12,6 @@ const config: webpack.Configuration = {
     entry: {
         // webusb
         webusb: path.resolve(__dirname, '../src/webusb/index.ts'),
-        // webextension
-        extensionPermissions: path.resolve(
-            __dirname,
-            '../src/webextension/extensionPermissions.ts',
-        ),
     },
     output: {
         filename: 'js/[name].[contenthash].js',
@@ -56,22 +50,6 @@ const config: webpack.Configuration = {
     performance: {
         hints: false,
     },
-    plugins: [
-        new HtmlWebpackPlugin({
-            chunks: ['webusb'],
-            filename: 'webusb.html',
-            template: path.join(__dirname, '../src/webusb/webusb.html'),
-            inject: true,
-            minify: false,
-        }),
-        new HtmlWebpackPlugin({
-            chunks: ['extensionPermissions'],
-            filename: 'extension-permissions.html',
-            template: path.join(__dirname, '../src/webextension/extension-permissions.html'),
-            inject: true,
-            minify: false,
-        }),
-    ],
     optimization: {
         minimize: false,
         minimizer: [
