@@ -124,16 +124,16 @@ describe('account utils', () => {
                 }),
                 [
                     getSuiteDevice({
-                        state: '1stTestnet@device_id:0',
+                        state: { staticSessionId: '1stTestnet@device_id:0' },
                     }),
                     getSuiteDevice({
-                        state: '1stTestnet@device_id:3',
+                        state: { staticSessionId: '1stTestnet@device_id:3' },
                     }),
                 ],
             ),
         ).toEqual(
             getSuiteDevice({
-                state: '1stTestnet@device_id:0',
+                state: { staticSessionId: '1stTestnet@device_id:0' },
             }),
         );
     });

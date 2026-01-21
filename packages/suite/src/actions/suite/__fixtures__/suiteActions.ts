@@ -401,7 +401,7 @@ const handleDeviceDisconnect = [
                 devices: [
                     getSuiteDevice({
                         path: '1',
-                        state: '1stTestnetAddress@device_b_id:0',
+                        state: { staticSessionId: '1stTestnetAddress@device_b_id:0' },
                         remember: true,
                     }),
                 ],
@@ -419,13 +419,13 @@ const handleDeviceDisconnect = [
                     SUITE_DEVICE,
                     getSuiteDevice({
                         path: '1',
-                        state: '1stTestnetAddress@device_a_id:0',
+                        state: { staticSessionId: '1stTestnetAddress@device_a_id:0' },
                         instance: 2,
                         remember: true,
                     }),
                     getSuiteDevice({
                         path: '1',
-                        state: '1stTestnetAddress@device_b_id:0',
+                        state: { staticSessionId: '1stTestnetAddress@device_b_id:0' },
                         instance: 1,
                         remember: true,
                     }),
@@ -436,7 +436,7 @@ const handleDeviceDisconnect = [
         result: {
             type: deviceActions.selectDevice.type,
             payload: getSuiteDevice({
-                state: '1stTestnetAddress@device_b_id:0',
+                state: { staticSessionId: '1stTestnetAddress@device_b_id:0' },
                 instance: 1,
                 remember: true,
             }),
@@ -633,7 +633,7 @@ const forgetDisconnectedDevices = [
                         path: '1',
                         instance: 2,
                         remember: true,
-                        state: '1stTestnetAddress@device_1_id:0',
+                        state: { staticSessionId: '1stTestnetAddress@device_1_id:0' },
                     }),
                     getSuiteDevice({
                         path: '2',

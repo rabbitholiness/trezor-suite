@@ -4,7 +4,7 @@ import * as MODAL from 'src/actions/suite/constants/modalConstants';
 import * as COINJOIN from 'src/actions/wallet/constants/coinjoinConstants';
 
 export const DEVICE = testMocks.getSuiteDevice({
-    state: '1stTestnetAddress@device_id:0',
+    state: { staticSessionId: '1stTestnetAddress@device_id:0' },
     connected: true,
     available: true,
     remember: true,

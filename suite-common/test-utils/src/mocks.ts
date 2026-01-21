@@ -225,11 +225,7 @@ const getConnectDevice = (dev?: Partial<StringPath<Device>>, feat?: Partial<Feat
  * If you want tighter types in a test, do narrowing with type guards (e.g. throw if not acquired).
  */
 export const getSuiteDevice = (
-    dev?: Partial<
-        Omit<StringPath<TrezorDevice>, 'state'> & {
-            state?: `${string}@${string}:${number}`;
-        }
-    >,
+    dev?: Partial<StringPath<TrezorDevice>>,
     feat?: Partial<Features>,
 ): TrezorDevice => {
     const bootloader_mode = dev?.mode === 'bootloader';
@@ -247,11 +243,6 @@ export const getSuiteDevice = (
             suiteSyncOwner: null,
             ...dev,
             ...device,
-            state: dev?.state
-                ? {
-                      staticSessionId: dev.state,
-                  }
-                : undefined,
         } as TrezorDevice;
     }
 

@@ -12,10 +12,10 @@ import {
 
 const BTC_DEVICE_SSID: `${string}@${string}:${number}` =
     'mvbu1Gdy8SUjTenqerxUaZyYjmveZvt33q@AC94BB9C1B08FE73BE1E3322:0';
-const BTC_DEVICE = testMocks.getSuiteDevice({ state: BTC_DEVICE_SSID });
+const BTC_DEVICE = testMocks.getSuiteDevice({ state: { staticSessionId: BTC_DEVICE_SSID } });
 
 const ETH_DEVICE_SSID: `${string}@${string}:${number}` = '1stTestnetAddress@device_id:0';
-const ETH_DEVICE = testMocks.getSuiteDevice({ state: ETH_DEVICE_SSID });
+const ETH_DEVICE = testMocks.getSuiteDevice({ state: { staticSessionId: ETH_DEVICE_SSID } });
 
 const mockState: AccountsRootState & DeviceRootState = {
     wallet: {
