@@ -77,20 +77,22 @@ export class CoreInSuiteWeb implements ConnectFactoryDependencies<ConnectSetting
     }
 
     private getSuiteUrl() {
-        // todo: we need to control this in a better way. For example 3rd party probably wants to develop against production suite-web
-        if (window.location.origin === 'http://localhost:8088') {
-            return 'http://localhost:8000/connect-popup';
-        }
-        if (window.location.href.startsWith('https://dev.suite.sldev.cz/connect/')) {
-            const branch = this._settings.connectSrc?.replace(
-                'https://dev.suite.sldev.cz/connect/',
-                '',
-            );
+        return 'http://localhost:8000/connect-popup';
 
-            return `https://dev.suite.sldev.cz/suite-web/${branch}web/connect-popup`;
-        }
+        // // todo: we need to control this in a better way. For example 3rd party probably wants to develop against production suite-web
+        // if (window.location.origin === 'http://localhost:8088') {
+        //     return 'http://localhost:8000/connect-popup';
+        // }
+        // if (window.location.href.startsWith('https://dev.suite.sldev.cz/connect/')) {
+        //     const branch = this._settings.connectSrc?.replace(
+        //         'https://dev.suite.sldev.cz/connect/',
+        //         '',
+        //     );
 
-        return 'https://suite.trezor.io/web/connect-popup';
+        //     return `https://dev.suite.sldev.cz/suite-web/${branch}web/connect-popup`;
+        // }
+
+        // return 'https://suite.trezor.io/web/connect-popup';
     }
 
     /**
