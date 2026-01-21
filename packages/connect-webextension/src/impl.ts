@@ -1,6 +1,4 @@
 import { InitFullSettings } from '@trezor/connect/src/types/api/init';
-
-// todo: we could get rid of connect-web imports dep here by moving implementation to connect-common (abstract.ts) and here (webextension.ts)
 import { CoreInSuiteDesktop } from '@trezor/connect-web/src/impl/core-in-suite-desktop';
 import { CoreInSuiteWeb } from '@trezor/connect-web/src/impl/core-in-suite-web';
 
