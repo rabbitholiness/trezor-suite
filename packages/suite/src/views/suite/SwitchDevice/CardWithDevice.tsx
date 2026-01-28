@@ -31,8 +31,8 @@ export const CardWithDevice = ({
 }: CardWithDeviceProps) => {
     const deviceStatus = deviceUtils.getStatus(device);
 
-    const needsAttention = deviceUtils.deviceNeedsAttention(deviceStatus);
-    const isUnknown = device.type !== 'acquired';
+    const needsAttention =
+        device.connected && !device.features && deviceUtils.deviceNeedsAttention(deviceStatus);
 
     return (
         <Card paddingType="none">
@@ -55,7 +55,7 @@ export const CardWithDevice = ({
 
                 {!needsAttention && (
                     <AnimatePresence initial={false}>
-                        {!isUnknown && (
+                        {device.features && (
                             <motion.div {...motionAnimation.expand}>{children}</motion.div>
                         )}
                     </AnimatePresence>

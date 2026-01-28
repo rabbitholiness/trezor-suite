@@ -1996,7 +1996,7 @@ export const messages = defineMessages({
         id: 'TR_FIRMWARE_CORRUPTED_CONNECT_DESCRIPTION',
     },
     TR_NEEDS_TREZOR_HOST_PROTOCOL_PAIRING_DESCRIPTION: {
-        defaultMessage: 'Continue to THP pairing',
+        defaultMessage: 'Continue to secure connection',
         id: 'TR_NEEDS_TREZOR_HOST_PROTOCOL_PAIRING_DESCRIPTION',
     },
     TR_UDEV_DOWNLOAD_TITLE: {

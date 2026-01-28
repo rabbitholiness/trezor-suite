@@ -159,7 +159,7 @@ const connectDevice = (
         );
         if (knownDevices.length > 0) {
             knownDevices.forEach(dd => {
-                dd.type = device.type;
+                // dd.type = device.type;
                 dd.connected = true;
                 dd.path = device.path;
                 dd.status = device.status;

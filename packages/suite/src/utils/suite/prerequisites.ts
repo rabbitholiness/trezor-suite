@@ -65,8 +65,9 @@ export const getPrerequisiteName = ({
     // Unacquired device with Trezor Host Protocol properties means
     // that the user must perform the Trezor Host Protocol paring
     if (device.status === 'thp-locked') {
-        return 'device-thp-locked';
+        return !device.features ? 'device-thp-locked' : null;
     }
+    // todo: pin locked?
 
     // device features cannot be read, device is probably used in another window
     if (device.type === 'unacquired') return 'device-unacquired';
