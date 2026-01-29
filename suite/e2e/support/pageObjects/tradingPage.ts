@@ -657,7 +657,7 @@ export class TradingPage {
             );
             await expect.soft(provider).toHaveText(expectedProvider);
             //validate amount of the quote row
-            const amount = quote.getByTestId('@trading/offers/quote/amount');
+            const amount = quote.getByTestId('@trading/offers/quote/crypto-amount-with-symbol');
             const expectedAmount = formatExpectedAmount(expectedQuotes[index]);
             await expect.soft(amount).toHaveText(expectedAmount);
         }
