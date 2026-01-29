@@ -24,6 +24,7 @@ export const createSetLabelsForSuiteSync =
                     label: outputLabel.suiteSyncOutputLabelsToBeUpdated.label,
                     accountDescriptor: outputLabel.data.toBeMoved.descriptor,
                     networkSymbol: outputLabel.data.toBeMoved.symbol,
+                    isWriteMode: true,
                 }),
             ),
         );
@@ -43,6 +44,7 @@ export const createDeleteLabelsForSuiteSync =
                         label: null,
                         accountDescriptor: deleteOutput.data.toBeMoved.descriptor,
                         networkSymbol: deleteOutput.data.toBeMoved.symbol,
+                        isWriteMode: true,
                     }),
                 ),
             ),

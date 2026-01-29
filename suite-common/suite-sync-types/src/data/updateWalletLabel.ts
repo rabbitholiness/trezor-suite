@@ -7,6 +7,7 @@ import { EnsureWalletSuiteSyncOnErrors } from '../storage/ensureWalletSuiteSyncO
 export type UpdateWalletLabelParams = {
     deviceStaticSessionId: StaticSessionId;
     label: string | null;
+    isWriteMode: boolean;
 };
 
 export type UpdateWalletLabel = (

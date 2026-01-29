@@ -12,9 +12,11 @@ export const createUpdateOutputLabel =
         txId,
         networkSymbol,
         deviceStaticSessionId,
+        isWriteMode,
     }) => {
         const ensureWalletOnResult = await deps.ensureWalletSuiteSyncOn({
             deviceStaticSessionId,
+            isWriteMode,
         });
 
         if (!ensureWalletOnResult.success) {

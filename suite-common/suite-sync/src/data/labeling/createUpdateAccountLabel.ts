@@ -5,9 +5,10 @@ export type UpdateAccountLabelDeps = EnsureWalletSuiteSyncOnDep;
 
 export const createUpdateAccountLabel =
     (deps: UpdateAccountLabelDeps): UpdateAccountLabel =>
-    async ({ deviceStaticSessionId, accountKey, label }) => {
+    async ({ deviceStaticSessionId, accountKey, label, isWriteMode }) => {
         const ensureWalletOnResult = await deps.ensureWalletSuiteSyncOn({
             deviceStaticSessionId,
+            isWriteMode,
         });
 
         if (!ensureWalletOnResult.success) {

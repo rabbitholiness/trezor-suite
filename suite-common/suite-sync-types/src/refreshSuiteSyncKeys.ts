@@ -4,6 +4,7 @@ import { Result } from '@trezor/type-utils';
 
 type RefreshSuiteSyncKeysParams = {
     device: TrezorDevice;
+    isWriteMode: boolean;
 };
 
 /**

@@ -5,9 +5,17 @@ export type UpdateAddressLabelDeps = EnsureWalletSuiteSyncOnDep;
 
 export const createUpdateAddressLabel =
     (deps: UpdateAddressLabelDeps): UpdateAddressLabel =>
-    async ({ deviceStaticSessionId, address, label, accountDescriptor, networkSymbol }) => {
+    async ({
+        deviceStaticSessionId,
+        address,
+        label,
+        accountDescriptor,
+        networkSymbol,
+        isWriteMode,
+    }) => {
         const ensureWalletOnResult = await deps.ensureWalletSuiteSyncOn({
             deviceStaticSessionId,
+            isWriteMode,
         });
 
         if (!ensureWalletOnResult.success) {

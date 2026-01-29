@@ -55,10 +55,12 @@ describe(ensureOwnerHasAllocatedQuotaThunk.name, () => {
         const getState = createGetState({ enabled: false });
         const dispatch = jest.fn();
 
-        await ensureOwnerHasAllocatedQuotaThunk({ ownerId, delegatedKey, walletDescriptor })(
-            dispatch,
-            getState,
-        );
+        await ensureOwnerHasAllocatedQuotaThunk({
+            ownerId,
+            delegatedKey,
+            walletDescriptor,
+            isWriteMode: false,
+        })(dispatch, getState);
 
         expect(checkStorageByOwnerIdMock).not.toHaveBeenCalled();
         expect(dispatch).not.toHaveBeenCalled();
@@ -70,10 +72,12 @@ describe(ensureOwnerHasAllocatedQuotaThunk.name, () => {
 
         checkStorageByOwnerIdMock.mockResolvedValue(ok({ totalSpace: 2048 }));
 
-        await ensureOwnerHasAllocatedQuotaThunk({ ownerId, delegatedKey, walletDescriptor })(
-            dispatch,
-            getState,
-        );
+        await ensureOwnerHasAllocatedQuotaThunk({
+            ownerId,
+            delegatedKey,
+            walletDescriptor,
+            isWriteMode: false,
+        })(dispatch, getState);
 
         expect(checkStorageByOwnerIdMock).toHaveBeenCalledWith({
             baseUrl: 'https://quota-manager.test',
@@ -100,10 +104,12 @@ describe(ensureOwnerHasAllocatedQuotaThunk.name, () => {
             err({ type: 'HttpError', code: 500, message: 'Internal error' }),
         );
 
-        await ensureOwnerHasAllocatedQuotaThunk({ ownerId, delegatedKey, walletDescriptor })(
-            dispatch,
-            getState,
-        );
+        await ensureOwnerHasAllocatedQuotaThunk({
+            ownerId,
+            delegatedKey,
+            walletDescriptor,
+            isWriteMode: true,
+        })(dispatch, getState);
 
         expect(dispatch).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -133,10 +139,12 @@ describe(ensureOwnerHasAllocatedQuotaThunk.name, () => {
         const transferThunkInner = jest.fn();
         transferStorageThunkMock.mockReturnValue(transferThunkInner);
 
-        await ensureOwnerHasAllocatedQuotaThunk({ ownerId, delegatedKey, walletDescriptor })(
-            dispatch,
-            getState,
-        );
+        await ensureOwnerHasAllocatedQuotaThunk({
+            ownerId,
+            delegatedKey,
+            walletDescriptor,
+            isWriteMode: true,
+        })(dispatch, getState);
 
         expect(prepareChallengeSessionMock).toHaveBeenCalledWith({
             baseUrl: 'https://quota-manager.test',

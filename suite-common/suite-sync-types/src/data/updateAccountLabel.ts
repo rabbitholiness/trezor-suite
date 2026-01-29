@@ -8,6 +8,7 @@ export type UpdateAccountLabelParams = {
     deviceStaticSessionId: StaticSessionId;
     accountKey: string;
     label: string | null;
+    isWriteMode: boolean;
 };
 
 export type UpdateAccountLabel = (

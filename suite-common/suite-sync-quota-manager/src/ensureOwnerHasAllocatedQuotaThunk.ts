@@ -21,10 +21,16 @@ type EnsureOwnerHasAllocatedQuotaParams = {
     ownerId: SuiteSyncOwnerId;
     walletDescriptor: WalletDescriptor;
     delegatedKey: DelegatedIdentityKey;
+    isWriteMode: boolean;
 };
 
 export const ensureOwnerHasAllocatedQuotaThunk =
-    ({ ownerId, walletDescriptor, delegatedKey }: EnsureOwnerHasAllocatedQuotaParams) =>
+    ({
+        ownerId,
+        walletDescriptor,
+        delegatedKey,
+        isWriteMode,
+    }: EnsureOwnerHasAllocatedQuotaParams) =>
     async (dispatch: Dispatch, getState: () => any) => {
         const isQuotaManagerEnabled = selectIsQuotaManagerEnabled(getState());
 
@@ -45,6 +51,11 @@ export const ensureOwnerHasAllocatedQuotaThunk =
                 }),
             );
 
+            return;
+        }
+
+        // if the user does not want to save label, we won't allocate the Quota
+        if (isWriteMode === false) {
             return;
         }
 

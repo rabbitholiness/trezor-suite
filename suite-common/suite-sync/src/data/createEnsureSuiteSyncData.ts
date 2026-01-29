@@ -18,7 +18,10 @@ export type CreateSubscribeSuiteSyncDataDeps = EnsureStorageDep &
 export const createEnsureSubscribeSuiteSyncData =
     (deps: CreateSubscribeSuiteSyncDataDeps): SubscribeSuiteSyncData =>
     async ({ deviceStaticSessionId }): ReturnType<SubscribeSuiteSyncData> => {
-        const storageResult = await deps.ensureStorage({ deviceStaticSessionId });
+        const storageResult = await deps.ensureStorage({
+            deviceStaticSessionId,
+            isWriteMode: true,
+        });
 
         if (!storageResult.success) {
             return storageResult;

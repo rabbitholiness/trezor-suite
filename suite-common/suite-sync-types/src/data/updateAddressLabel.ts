@@ -12,6 +12,7 @@ export type UpdateAddressLabelParams = {
     label: string | null;
     accountDescriptor: AccountDescriptor;
     networkSymbol: NetworkSymbol;
+    isWriteMode: boolean;
 };
 
 export type UpdateAddressLabel = (

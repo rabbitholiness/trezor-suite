@@ -13,6 +13,7 @@ type UpdateOutputLabelParams = {
     label: string | null;
     accountDescriptor: AccountDescriptor;
     networkSymbol: NetworkSymbol;
+    isWriteMode: boolean;
 };
 
 export type UpdateOutputLabel = (

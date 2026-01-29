@@ -36,7 +36,7 @@ export type RefreshSuiteSyncKeysDeps = {
 
 export const createRefreshSuiteSync =
     (deps: RefreshSuiteSyncKeysDeps): RefreshSuiteSyncKeys =>
-    async ({ device }): ReturnType<RefreshSuiteSyncKeys> => {
+    async ({ device, isWriteMode }): ReturnType<RefreshSuiteSyncKeys> => {
         if (!device || !isTrezorDeviceWithState(device)) {
             return err(SuiteSyncUnavailableOnDeviceError());
         }
@@ -95,6 +95,7 @@ export const createRefreshSuiteSync =
                     walletDescriptor,
                     ownerId: ownerResult.payload.ownerId,
                     delegatedKey: delegatedKeyResult.payload,
+                    isWriteMode,
                 }),
             );
 

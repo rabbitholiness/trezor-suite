@@ -36,7 +36,9 @@ export const createEnsureWalletSuiteSyncOn =
             return err({ type: 'SuiteSyncUnavailableOnDeviceError' });
         }
 
-        const result = await deps.ensureSuiteSyncData({ deviceStaticSessionId });
+        const result = await deps.ensureSuiteSyncData({
+            deviceStaticSessionId,
+        });
 
         if (!result.success) {
             const { type } = result.error;

@@ -9,7 +9,10 @@ export type SuiteSyncFirmwareUpgradeNeededDeviceErrorType = {
     type: 'SuiteSyncFirmwareUpgradeNeededDeviceErrorType';
 };
 
-export type EnsureWalletSuiteSyncOnParams = { deviceStaticSessionId: StaticSessionId };
+export type EnsureWalletSuiteSyncOnParams = {
+    deviceStaticSessionId: StaticSessionId;
+    isWriteMode: boolean;
+};
 
 /**
  * Those are all errors that may happen during ensuring that SuiteSync is in on.
