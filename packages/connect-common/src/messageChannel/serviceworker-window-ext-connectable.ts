@@ -49,13 +49,13 @@ export class ServiceWorkerWindowExtConnectableChannel<
                     this.logger?.debug('CHANNEL sending to tab:', tabId, 'message:', message);
 
                     if (!tabId) {
-                        console.error('CHANNEL: No tab ID available, cannot send message');
+                        this.logger?.error('CHANNEL: No tab ID available, cannot send message');
                         throw new Error('No tab ID available');
                     }
 
                     // Ensure message has the required structure for round-trip
                     if (!message.id) {
-                        console.warn(
+                        this.logger?.warn(
                             'CHANNEL: Message without ID, this might cause issues with response handling',
                             message,
                         );
@@ -88,7 +88,7 @@ export class ServiceWorkerWindowExtConnectableChannel<
                         url: currentUrl.toString(),
                     });
                 } catch (error) {
-                    console.error('CHANNEL: Error sending message via tab update:', error);
+                    this.logger?.error('CHANNEL: Error sending message via tab update:', error);
                     throw error;
                 }
             },
@@ -113,7 +113,7 @@ export class ServiceWorkerWindowExtConnectableChannel<
 
             // Verify message comes from the correct extension context
             if (!message.channel) {
-                console.warn('CHANNEL: Received message without channel info, ignoring');
+                this.logger?.warn('CHANNEL: Received message without channel info, ignoring');
                 sendResponse({ error: 'Missing channel info' });
 
                 return false;

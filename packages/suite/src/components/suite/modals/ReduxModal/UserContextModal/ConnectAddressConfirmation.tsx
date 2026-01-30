@@ -42,7 +42,6 @@ export const ConnectAddressConfirmation = () => {
 
         // Close the webextension popup if this is a webextension call
         if (isWebextensionMode) {
-            console.log('>>>>>> onFinish: Calling closeWebextensionPopup');
             closeWebextensionPopup();
         }
     };

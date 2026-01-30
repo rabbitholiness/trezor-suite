@@ -136,6 +136,7 @@ export abstract class Popup extends EventEmitter {
         } else if (message.type === POPUP.CLOSED) {
             await this.close();
             this.emitClosed();
+            this.clear();
         } else if (message.event === DEVICE_EVENT) {
             this.emit(DEVICE_EVENT, message);
         }

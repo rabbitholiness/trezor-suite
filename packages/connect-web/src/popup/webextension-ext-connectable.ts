@@ -105,7 +105,7 @@ export class WebExtensionPopup extends Popup {
         }
     }
 
-    protected async closePopup(): Promise<void> {
+    protected closePopup() {
         if (!this.popupWindow) return;
 
         if (this.popupWindow.id) {

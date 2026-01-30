@@ -27,12 +27,12 @@ function getConnectExplorerUrl() {
 }
 
 async function gotoConnectExplorer(page: Page, method: string) {
-    const path = `methods/${method}/?core-mode=suite-web)}`;
+    const url = `methods/${method}/?core-mode=suite-web)}`;
     try {
-        await page.goto(`${getConnectExplorerUrl()}${path}`, { waitUntil: 'load' });
+        await page.goto(`${getConnectExplorerUrl()}${url}`, { waitUntil: 'load' });
     } catch {
         // Fallback to develop branch
-        await page.goto(`${getConnectExplorerUrlSldev()}${path}`, {
+        await page.goto(`${getConnectExplorerUrlSldev()}${url}`, {
             waitUntil: 'load',
         });
     }
