@@ -48,7 +48,7 @@ export const Labeling = () => {
             !showSuiteSync && option.value === 'legacy'
                 ? translationString(LABELING_LEGACY_OPTION_LABEL)
                 : translationString(option.label),
-    }));
+    })).filter(option => option.value !== 'suite-sync' || showSuiteSync);
 
     const handleLegacyOptionSelect = async () => {
         await suiteSync.turnOffSuiteSync();
