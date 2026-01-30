@@ -1,10 +1,10 @@
 import EventEmitter from 'events';
 
-import { CONTENT_SCRIPT_VERSION, VERSION } from '@trezor/connect/src/data/version';
 import { CoreEventMessage, DEVICE_EVENT, POPUP } from '@trezor/connect/src/events';
 import type { ConnectSettings } from '@trezor/connect/src/types';
 import { Log } from '@trezor/connect/src/utils/debug';
 import { getOrigin } from '@trezor/connect/src/utils/urlUtils';
+import { VERSION } from '@trezor/connect-common/src/data/version';
 import {
     AbstractMessageChannel,
     Message,
@@ -64,7 +64,10 @@ export abstract class Popup extends EventEmitter {
      */
     protected abstract isOpen(): Promise<boolean>;
 
-    async request() {
+    /**
+     * focus existing or open
+     */
+    async focusOrCreate() {
         // popup request
 
         // check if current popup window is still open
@@ -100,10 +103,11 @@ export abstract class Popup extends EventEmitter {
         const params = new URLSearchParams();
         params.set('version', VERSION);
         params.set('env', this.settings.env);
+
+        // todo: move this to webextension specific popup
         // Pass extension ID to popup via query string
         if (this.settings.env === 'webextension' && chrome?.runtime?.id) {
             params.set('extension-id', chrome.runtime.id);
-            params.set('cs-ver', CONTENT_SCRIPT_VERSION.toString());
         }
 
         return src + '?' + params.toString();
@@ -122,7 +126,7 @@ export abstract class Popup extends EventEmitter {
         }, POPUP_CLOSE_INTERVAL);
     }
 
-    private handleCoreMessage(message: Message<CoreEventMessage>) {
+    private async handleCoreMessage(message: Message<CoreEventMessage>) {
         if (message.type === POPUP.CORE_LOADED) {
             this.channel.postMessage({
                 type: POPUP.HANDSHAKE,
@@ -131,14 +135,8 @@ export abstract class Popup extends EventEmitter {
             });
             this.handshakePromise?.resolve();
         } else if (message.type === POPUP.CLOSED) {
+            await this.close();
             this.emitClosed();
-        } else if (message.type === POPUP.CONTENT_SCRIPT_LOADED) {
-            const { contentScriptVersion } = message.payload;
-            if (contentScriptVersion !== CONTENT_SCRIPT_VERSION) {
-                console.warn(
-                    `Content script version mismatch. Expected ${CONTENT_SCRIPT_VERSION}, got ${contentScriptVersion}`,
-                );
-            }
         } else if (message.event === DEVICE_EVENT) {
             this.emit(DEVICE_EVENT, message);
         }
@@ -171,8 +169,8 @@ export abstract class Popup extends EventEmitter {
         // Platform-specific implementation - override in subclasses
     }
 
-    private close() {
-        if (!this.isOpen()) return;
+    private async close() {
+        if (!(await this.isOpen())) return;
 
         this.logger.debug('closing popup');
         this.closePopup();

@@ -106,11 +106,19 @@ export class CoreInSuiteWeb implements ConnectFactoryDependencies<ConnectSetting
         if (!this._popupManager) {
             return createErrorMessage(ERRORS.TypedError('Init_NotInitialized'));
         }
-        await this._popupManager.request();
+        this.logger.debug('call - awaiting popupManger.focusOrCreate()');
+
+        await this._popupManager.focusOrCreate();
+        this.logger.debug('call - popupManager.request() resolved');
+
+        /////// visime tu
         await this._popupManager.channel.init();
+        this.logger.debug('call - popupManager.channel.init() resolved');
         await this._popupManager.handshakePromise?.promise;
 
         try {
+            this.logger.debug('call - sending iframe.call');
+
             // post message to core in popup
             const response = await this._popupManager.channel.postMessage({
                 type: IFRAME.CALL,

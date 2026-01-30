@@ -5,14 +5,6 @@ import webpack from 'webpack';
 
 const DIST = path.resolve(__dirname, '../build-webextension');
 
-const CONNECT_WEB_EXTENSION_PACKAGE_PATH = path.join(
-    __dirname,
-    '..',
-    '..',
-    'connect-webextension',
-    'build',
-);
-
 const config: webpack.Configuration = {
     target: 'web',
     mode: 'production',
@@ -114,14 +106,6 @@ const config: webpack.Configuration = {
                 {
                     from: path.join(__dirname, '..', 'src-webextension', 'manifest.json'),
                     to: `${DIST}/`,
-                },
-                {
-                    from: path.join(
-                        CONNECT_WEB_EXTENSION_PACKAGE_PATH,
-                        'trezor-connect-webextension.js',
-                    ),
-                    to: `${DIST}/vendor`,
-                    info: { minimized: false },
                 },
             ],
         }),

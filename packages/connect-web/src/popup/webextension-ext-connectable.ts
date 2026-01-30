@@ -2,8 +2,8 @@ import { CoreEventMessage } from '@trezor/connect/src/events';
 import type { ConnectSettings } from '@trezor/connect/src/types';
 import { Log } from '@trezor/connect/src/utils/debug';
 import { AbstractMessageChannel } from '@trezor/connect-common/src/messageChannel/abstract';
-import { ServiceWorkerWindowChannel } from '@trezor/connect-common/src/messageChannel/serviceworker-window';
-import { scheduleAction } from '@trezor/utils';
+import { ServiceWorkerWindowExtConnectableChannel } from '@trezor/connect-common/src/messageChannel/serviceworker-window-ext-connectable';
+import { createDeferred } from '@trezor/utils';
 
 import { Popup } from './abstract';
 
@@ -24,6 +24,7 @@ const checkIfTabExists = (tabId: number | undefined): Promise<boolean> =>
 
 export class WebExtensionPopup extends Popup {
     private popupWindow?: chrome.tabs.Tab;
+    private popupWindowPromise = createDeferred<chrome.tabs.Tab>();
 
     private extensionTabId = 0;
 
@@ -32,28 +33,21 @@ export class WebExtensionPopup extends Popup {
     }
 
     protected createChannel(): AbstractMessageChannel<CoreEventMessage> {
-        return new ServiceWorkerWindowChannel<CoreEventMessage>({
-            name: 'trezor-connect',
+        return new ServiceWorkerWindowExtConnectableChannel<CoreEventMessage>({
             channel: {
-                here: '@trezor/connect-webextension',
-                peer: '@trezor/connect-content-script',
+                here: '@trezor/connect-webextension-externally-connectable',
+                peer: '@trezor/suite-web',
             },
-            logger: this.logger,
-            currentId: () => {
-                return this.popupWindow?.id;
-            },
+            popupUrl: this.buildPopupUrl(this.settings.popupSrc),
+            currentId: () => this.popupWindowPromise?.promise.then(tab => tab.id),
         });
     }
 
-    protected async open(): Promise<void> {
+    protected open() {
         const src = this.settings.popupSrc;
+        // buildPopupUrl already includes extension-id for webextension env
         const url = this.buildPopupUrl(src);
-        this.openWrapper(url);
 
-        this.startCloseMonitoring();
-    }
-
-    private openWrapper(url: string) {
         chrome.windows.getCurrent(currentWindow => {
             this.logger.debug('opening popup. currentWindow: ', currentWindow);
             // Request coming from extension popup,
@@ -67,7 +61,7 @@ export class WebExtensionPopup extends Popup {
                         },
                         tabs => {
                             this.popupWindow = tabs[0];
-                            this.injectContentScript(tabs[0].id!);
+                            this.popupWindowPromise?.resolve(tabs[0]);
                         },
                     );
                 });
@@ -87,7 +81,7 @@ export class WebExtensionPopup extends Popup {
                             },
                             tab => {
                                 this.popupWindow = tab;
-                                this.injectContentScript(tab.id!);
+                                this.popupWindowPromise?.resolve(tab);
                             },
                         );
                     },
@@ -97,37 +91,13 @@ export class WebExtensionPopup extends Popup {
 
         if (!this.channel.isConnected) {
             this.channel.connect();
+            // Initialize the channel handshake
+            this.channel.init().catch(error => {
+                this.logger.error('Channel handshake failed:', error);
+            });
         }
+        this.startCloseMonitoring();
     }
-
-    private injectContentScript = (tabId: number) => {
-        chrome.permissions.getAll(permissions => {
-            if (permissions.permissions?.includes('scripting')) {
-                // Retry due to Firefox where the content script is sometimes not injected on the first try
-                scheduleAction(
-                    () =>
-                        chrome.scripting
-                            .executeScript({
-                                target: { tabId },
-                                // content script is injected into body of func in build time.
-                                func: () => {
-                                    // <!--content-script-->
-                                },
-                            })
-                            .then(() => {
-                                this.logger.debug('content script injected');
-                            })
-                            .catch(error => {
-                                this.logger.error('content script injection error', error);
-                                throw error;
-                            }),
-                    { attempts: new Array(3).fill({ timeout: 100 }) },
-                );
-            } else {
-                // When permissions for `scripting` are not provided 3rd party integrations have include content-script.js manually.
-            }
-        });
-    };
 
     protected focusPopup(): void {
         if (this.popupWindow?.id) {
@@ -162,6 +132,7 @@ export class WebExtensionPopup extends Popup {
 
                 return exists === true;
             }
+
             return false;
         })();
     }
@@ -169,7 +140,14 @@ export class WebExtensionPopup extends Popup {
     protected onClear(focus = true): void {
         // switch to previously focused tab
         if (focus && this.extensionTabId) {
-            chrome.tabs.update(this.extensionTabId, { active: true });
+            this.logger.debug('Focusing back to extension tab:', this.extensionTabId);
+            chrome.tabs.update(this.extensionTabId, { active: true }, () => {
+                if (chrome.runtime.lastError) {
+                    this.logger.error('Failed to focus extension tab:', chrome.runtime.lastError);
+                } else {
+                    this.logger.debug('Successfully focused extension tab');
+                }
+            });
             this.extensionTabId = 0;
         }
     }

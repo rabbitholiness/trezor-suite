@@ -5,7 +5,7 @@ import { Log } from '@trezor/connect/src/utils/debug';
 
 import { Popup } from './abstract';
 import { WebPopup } from './web';
-import { WebExtensionPopup } from './webextension';
+import { WebExtensionPopup } from './webextension-ext-connectable';
 
 /**
  * PopupManager is the main export, maintaining backward compatibility
@@ -23,8 +23,8 @@ export class PopupManager {
         }
     }
 
-    async request() {
-        return this.instance.request();
+    focusOrCreate() {
+        return this.instance.focusOrCreate();
     }
 
     get channel() {

@@ -21,8 +21,6 @@ export const getEnv = () => {
     return 'web';
 };
 
-declare let global: any;
-
 /**
  * Settings from host
  * @param input Partial<ConnectSettings>

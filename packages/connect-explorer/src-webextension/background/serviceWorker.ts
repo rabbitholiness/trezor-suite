@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import TrezorConnect, { DEVICE_EVENT } from '@trezor/connect-webextension';
+import TrezorConnect, { DEVICE_EVENT } from '../../../connect-webextension/src';
 
 // Example use of TrezorConnect
 // Without this, the import would be removed by Webpack tree-shaking
