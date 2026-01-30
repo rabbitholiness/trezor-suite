@@ -11,10 +11,9 @@ import {
     tradingActions,
 } from '@suite-common/trading';
 import { TokenAddress } from '@suite-common/wallet-types';
-import { Card, Column, Divider, Row } from '@trezor/components';
+import { Column, Row } from '@trezor/components';
 import { hasBitcoinOnlyFirmware } from '@trezor/device-utils/src/firmwareUtils';
 import { useCurrentRef } from '@trezor/react-utils';
-import { spacings } from '@trezor/theme';
 
 import { ExperimentWrapper } from 'src/components/suite/Experiment/ExperimentWrapper';
 import { useDispatch, useSelector } from 'src/hooks/suite';
@@ -24,13 +23,16 @@ import { TradingFormInputCountry } from 'src/views/wallet/trading/common/Trading
 import { TradingFormInputFiatCrypto } from 'src/views/wallet/trading/common/TradingForm/TradingFormInput/TradingFormInputFiatCrypto/TradingFormInputFiatCrypto';
 import { TradingFormInputPaymentMethod } from 'src/views/wallet/trading/common/TradingForm/TradingFormInput/TradingFormInputPaymentMethod';
 
+import { TradingFormCard } from './TradingFormCard';
 import { TradingFormFeesDisclamer } from './TradingFormFeeDisclamer';
-import { TradingReceiveAddress } from '../TradingSelectedOffer/TradingReceiveAddress/TradingReceiveAddress';
-import { TradingSelectedOfferProvider } from '../TradingSelectedOffer/TradingSelectedOfferProvider';
 import {
     TradingFormInputBuyAsset,
     TradingFormInputBuyAssetProps,
 } from './TradingFormInput/TradingFormInputBuyAsset/TradingFormInputBuyAsset';
+import { TradingFormSection } from './TradingFormSection';
+import { TradingReceiveAddress } from '../TradingSelectedOffer/TradingReceiveAddress/TradingReceiveAddress';
+// eslint-disable-next-line import/order -- sibling (./) before parent (../) to match TradingSellFormInputs and TradingExchangeFormInputs
+import { TradingSelectedOfferProvider } from '../TradingSelectedOffer/TradingSelectedOfferProvider';
 
 export const TradingBuyFormInputs = () => {
     const context = useTradingFormContext<TradingBuyType>();
@@ -63,92 +65,73 @@ export const TradingBuyFormInputs = () => {
     const buySupportedCryptoIds = useSelector(selectTradingBuySupportedCryptoIds);
 
     return (
-        <Column gap={spacings.lg}>
-            <Card paddingType="none">
-                <Column gap={spacings.lg}>
-                    <Column
-                        gap={spacings.lg}
-                        padding={{
-                            vertical: spacings.md,
-                            horizontal: spacings.lg,
-                            bottom: cryptoSelect.id && !isLoading ? 0 : spacings.md,
-                        }}
-                    >
-                        <Column gap={spacings.xs}>
-                            <TradingFormInputFiatCrypto
-                                cryptoInputName={TRADING_FORM_CRYPTO_INPUT}
-                                fiatInputName={TRADING_FORM_FIAT_INPUT}
-                                cryptoSelectName={TRADING_FORM_CRYPTO_CURRENCY_SELECT}
-                                currencySelectLabel={currencySelect.label}
-                                cryptoCurrencyLabel={cryptoSelect.id}
-                            />
-
-                            {amountInCrypto && (
-                                <ExperimentWrapper
-                                    id={ExperimentId.tradingFiatValues}
-                                    components={[
-                                        {
-                                            variant: 'A',
-                                            element: <></>,
-                                        },
-                                        {
-                                            variant: 'B',
-                                            element: cryptoSelect.networkSymbol ? (
-                                                <Row justifyContent="end">
-                                                    <TradingBalance
-                                                        balance={cryptoInput}
-                                                        displaySymbol={cryptoSelect.displaySymbol}
-                                                        symbol={cryptoSelect.networkSymbol}
-                                                        tokenAddress={
-                                                            (cryptoSelect.contractAddress as TokenAddress) ??
-                                                            undefined
-                                                        }
-                                                        showOnlyAmount
-                                                        amountInCrypto={amountInCrypto}
-                                                    />
-                                                </Row>
-                                            ) : (
-                                                <></>
-                                            ),
-                                        },
-                                    ]}
-                                />
-                            )}
-                        </Column>
-
-                        <TradingFormInputBuyAsset
-                            inputLabel="TR_TRADING_YOU_BUY"
-                            inputName={TRADING_FORM_CRYPTO_CURRENCY_SELECT}
-                            inputDisabled={hasBitcoinOnlyFirmware(device)}
-                            onAssetSelect={handleCryptoSelect}
-                            includedCryptoIds={buySupportedCryptoIds}
-                            dataTestId="@trading/form/select-crypto-for-buy"
+        <Column gap={20}>
+            <TradingFormCard>
+                <TradingFormSection>
+                    <Column gap={8}>
+                        <TradingFormInputFiatCrypto
+                            cryptoInputName={TRADING_FORM_CRYPTO_INPUT}
+                            fiatInputName={TRADING_FORM_FIAT_INPUT}
+                            cryptoSelectName={TRADING_FORM_CRYPTO_CURRENCY_SELECT}
+                            currencySelectLabel={currencySelect.label}
+                            cryptoCurrencyLabel={cryptoSelect.id}
                         />
+
+                        {amountInCrypto && (
+                            <ExperimentWrapper
+                                id={ExperimentId.tradingFiatValues}
+                                components={[
+                                    {
+                                        variant: 'A',
+                                        element: <></>,
+                                    },
+                                    {
+                                        variant: 'B',
+                                        element: cryptoSelect.networkSymbol ? (
+                                            <Row justifyContent="end">
+                                                <TradingBalance
+                                                    balance={cryptoInput}
+                                                    displaySymbol={cryptoSelect.displaySymbol}
+                                                    symbol={cryptoSelect.networkSymbol}
+                                                    tokenAddress={
+                                                        (cryptoSelect.contractAddress as TokenAddress) ??
+                                                        undefined
+                                                    }
+                                                    showOnlyAmount
+                                                    amountInCrypto={amountInCrypto}
+                                                />
+                                            </Row>
+                                        ) : (
+                                            <></>
+                                        ),
+                                    },
+                                ]}
+                            />
+                        )}
                     </Column>
 
-                    {cryptoSelect && !isLoading && <TradingReceiveAddress />}
-                </Column>
-            </Card>
+                    <TradingFormInputBuyAsset
+                        inputLabel="TR_TRADING_YOU_BUY"
+                        inputName={TRADING_FORM_CRYPTO_CURRENCY_SELECT}
+                        inputDisabled={hasBitcoinOnlyFirmware(device)}
+                        onAssetSelect={handleCryptoSelect}
+                        includedCryptoIds={buySupportedCryptoIds}
+                        dataTestId="@trading/form/select-crypto-for-buy"
+                    />
+                </TradingFormSection>
+                {cryptoSelect && !isLoading && <TradingReceiveAddress />}
+            </TradingFormCard>
 
-            <Card paddingType="none">
-                <Column gap={spacings.lg}>
-                    <Column
-                        gap={spacings.lg}
-                        padding={{ vertical: spacings.md, horizontal: spacings.lg }}
-                    >
-                        <TradingFormInputPaymentMethod label="TR_TRADING_PAYMENT_METHOD" />
-                        <TradingFormInputCountry label="TR_TRADING_COUNTRY" />
-                    </Column>
-                </Column>
+            <TradingFormCard>
+                <TradingFormSection>
+                    <TradingFormInputPaymentMethod label="TR_TRADING_PAYMENT_METHOD" />
+                    <TradingFormInputCountry label="TR_TRADING_COUNTRY" />
+                </TradingFormSection>
                 <TradingSelectedOfferProvider />
-                <Divider margin={0} />
-                <Column
-                    gap={spacings.lg}
-                    padding={{ vertical: spacings.md, horizontal: spacings.lg }}
-                >
+                <TradingFormSection>
                     <TradingFormFeesDisclamer />
-                </Column>
-            </Card>
+                </TradingFormSection>
+            </TradingFormCard>
         </Column>
     );
 };

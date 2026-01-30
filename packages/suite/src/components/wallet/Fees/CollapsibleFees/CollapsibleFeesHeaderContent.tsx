@@ -1,5 +1,5 @@
 import { TranslationKey } from '@suite/intl';
-import { Box, Collapsible, Row } from '@trezor/components';
+import { Collapsible, Row } from '@trezor/components';
 import { TypographyStyle } from '@trezor/theme';
 
 import { ContentFlex } from 'src/support/suite/ContentFlex';
@@ -11,17 +11,17 @@ import { useTransactionMaxFee } from './hooks/useTransactionMaxFee';
 export type CollapsibleFeesHeaderContentProps = {
     label?: TranslationKey;
     headerTypographyStyle?: TypographyStyle;
-    isHeaderRowLayout?: boolean;
     supportsAdjustableFees: boolean;
     txMaxFee: ReturnType<typeof useTransactionMaxFee>;
+    isControlled: boolean;
 };
 
 export const CollapsibleFeesHeaderContent = ({
     label,
     headerTypographyStyle = 'body',
     supportsAdjustableFees,
-    isHeaderRowLayout,
     txMaxFee,
+    isControlled,
 }: CollapsibleFeesHeaderContentProps) => {
     const content = (
         <ContentFlex justifyContent="space-between" gap={12}>
@@ -35,20 +35,11 @@ export const CollapsibleFeesHeaderContent = ({
         </ContentFlex>
     );
 
-    return (
+    return isControlled ? (
+        content
+    ) : (
         <Collapsible.Toggle data-testid="@wallet/fees/collapsible-fees-toggle">
-            {isHeaderRowLayout ? (
-                <Box
-                    backgroundColorOnInteraction={
-                        supportsAdjustableFees ? 'backgroundSurfaceElevation2' : undefined
-                    }
-                    padding={{ vertical: 12, horizontal: 16 }}
-                >
-                    {content}
-                </Box>
-            ) : (
-                content
-            )}
+            {content}
         </Collapsible.Toggle>
     );
 };
