@@ -14,7 +14,7 @@ import { Translation, useTranslate } from '@suite-native/intl';
 import {
     CombinedLabelingState,
     selectAccountLabel,
-    selectSuiteSyncLabelingEnabled,
+    selectIsLabelingEnabled,
 } from '@suite-native/labeling';
 import { useNativeServices } from '@suite-native/services';
 
@@ -30,7 +30,7 @@ export const AccountRenameForm = ({ accountKey, onSubmit }: AccountRenameFormPro
     const account = useSelector((state: AccountsRootState) =>
         selectAccountByKey(state, accountKey),
     );
-    const suiteSyncLabelingEnabled = useSelector(selectSuiteSyncLabelingEnabled);
+    const suiteSyncLabelingEnabled = useSelector(selectIsLabelingEnabled);
     const inputRef = useRef<InputType>(null);
 
     const accountLabel = useSelector((state: CombinedLabelingState) => {

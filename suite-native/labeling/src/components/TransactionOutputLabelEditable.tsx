@@ -8,7 +8,7 @@ import type { StaticSessionId } from '@trezor/connect';
 
 import { EditableLabelLayout } from './EditableLabelLayout';
 import { LabelEditForm } from './LabelEditForm';
-import { selectSuiteSyncLabelingEnabled } from '../selectors';
+import { selectIsLabelingEnabled } from '../selectors';
 
 type TransactionOutputLabelEditableProps = {
     txId: string;
@@ -25,12 +25,24 @@ export const TransactionOutputLabelEditable = ({
     accountDescriptor,
     networkSymbol,
 }: TransactionOutputLabelEditableProps) => {
-    const isLabelingEnabled = useSelector(selectSuiteSyncLabelingEnabled);
+    const isLabelingEnabled = useSelector(selectIsLabelingEnabled);
     const { suiteSync } = useNativeServices();
 
     const label = useSelector((state: SuiteSyncDataRootState) =>
         selectSuiteSyncOutputLabel(state, txId, outputIndex, deviceStaticSessionId),
     );
+
+    const submitOutputLabel = ({ value, onClose }: { value: string; onClose: () => void }) => {
+        suiteSync.labeling.updateOutputLabel({
+            deviceStaticSessionId,
+            txId,
+            outputIndex,
+            label: value,
+            accountDescriptor,
+            networkSymbol,
+        });
+        onClose();
+    };
 
     if (!isLabelingEnabled) {
         return null;
@@ -41,17 +53,7 @@ export const TransactionOutputLabelEditable = ({
             {({ onClose }) => (
                 <LabelEditForm
                     label={label ?? ''}
-                    onSubmit={value => {
-                        suiteSync.labeling.updateOutputLabel({
-                            deviceStaticSessionId,
-                            txId,
-                            outputIndex,
-                            label: value,
-                            accountDescriptor,
-                            networkSymbol,
-                        });
-                        onClose();
-                    }}
+                    onSubmit={value => submitOutputLabel({ value, onClose })}
                 />
             )}
         </EditableLabelLayout>
