@@ -104,7 +104,6 @@ export abstract class Popup extends EventEmitter {
         params.set('version', VERSION);
         params.set('env', this.settings.env);
 
-        // todo: move this to webextension specific popup
         // Pass extension ID to popup via query string
         if (this.settings.env === 'webextension' && chrome?.runtime?.id) {
             params.set('extension-id', chrome.runtime.id);
@@ -165,9 +164,7 @@ export abstract class Popup extends EventEmitter {
     /**
      * Called during clear() for platform-specific cleanup
      */
-    protected onClear(_focus: boolean): void {
-        // Platform-specific implementation - override in subclasses
-    }
+    protected abstract onClear(_focus: boolean): void;
 
     private async close() {
         if (!(await this.isOpen())) return;
