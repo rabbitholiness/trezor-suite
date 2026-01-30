@@ -9,7 +9,6 @@ import {
     TRADING_EXCHANGE_FORM_DEX,
     TradingExchangeFormProps,
     TradingExchangeFormType,
-    exchangeUtils,
 } from '@suite-common/trading';
 
 interface TradingExchangeQuotesFilterProps {
@@ -22,14 +21,10 @@ interface TradingExchangeQuotesFilterProps {
 export const useTradingExchangeQuotesFilter = ({
     exchangeType,
     quotes,
-    exchangeInfo,
     setValue,
 }: TradingExchangeQuotesFilterProps) => {
     const dexQuotes = useMemo(() => quotes.filter(quote => quote.isDex), [quotes]);
-    const cexQuotes = useMemo(
-        () => exchangeUtils.getPreferredCexQuotes(quotes, exchangeInfo),
-        [quotes, exchangeInfo],
-    );
+    const cexQuotes = useMemo(() => quotes.filter(quote => !quote.isDex), [quotes]);
 
     // handle edge case when there are no longer quotes of selected exchange type
     useEffect(() => {
