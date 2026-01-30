@@ -65,7 +65,7 @@ export const closeWebextensionPopup = () => {
     setTimeout(() => {
         try {
             window.close();
-        } catch (error) {
+        } catch {
             // Browser may block this, but that's okay - the extension will close the tab
         }
     }, 50);
@@ -223,7 +223,7 @@ export const useConnectPopupWebextension = () => {
                     // Remove unhandled message from queue
                     setIncomingMessagesQueue(prev => prev.slice(1));
                 }
-            } catch (error) {
+            } catch {
                 // Remove failed message from queue
                 setIncomingMessagesQueue(prev => prev.slice(1));
             }

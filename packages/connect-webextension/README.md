@@ -93,11 +93,6 @@ responses back to the service worker.
 
 To ensure your extension is displayed with its name rather than its ID, you need to open a Pull Request to include it in the `knownHosts` section of the file located at https://github.com/trezor/trezor-suite/blob/develop/packages/connect/src/data/config.ts#L17.
 
-## Examples
-
-- [Simple example](https://github.com/trezor/trezor-suite/tree/develop/packages/connect-examples/webextension-mv3-sw)
-- [ES6 and TypeScript example](https://github.com/trezor/trezor-suite/tree/develop/packages/connect-examples/webextension-mv3-sw-ts)
-
 ## Development
 
 For dev, please check
