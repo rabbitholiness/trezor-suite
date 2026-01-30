@@ -15,7 +15,11 @@ import {
 } from '@suite-common/redux-utils';
 import type { SuiteSync } from '@suite-common/suite-sync-types';
 import { ReportSecurityCheckParams, Route } from '@suite-common/suite-types';
-import { AddressDisplayOptions, SelectedAccountLoaded } from '@suite-common/wallet-types';
+import {
+    AddressDisplayOptions,
+    SelectedAccountLoaded,
+    asAccountDescriptor,
+} from '@suite-common/wallet-types';
 import { Analytics } from '@trezor/analytics-uploader';
 import { err, ok } from '@trezor/type-utils';
 
@@ -115,7 +119,11 @@ export const extraDependenciesCommonMock: ExtraDependencies = {
         ),
         selectSelectedAccount: notImplementedSelector('selectSelectedAccount', {
             status: 'loaded',
-            account: testMocks.getWalletAccount(),
+            account: testMocks.getWalletAccount({
+                symbol: 'btc',
+                deviceState: '1@2:3',
+                descriptor: asAccountDescriptor('btc1'),
+            }),
         } as SelectedAccountLoaded),
         selectSelectedAccountStatus: notImplementedSelector(
             'selectSelectedAccountStatus',
