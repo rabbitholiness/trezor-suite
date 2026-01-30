@@ -70,6 +70,25 @@ Amend your manifest.json to include the script as a content script. Replace `<pa
 
 After completing these steps, you can use the module in your Service Worker in the same way as described in the previous section.
 
+## Externally Connectable popup (Suite Web)
+
+The current flow does **not** use `connect-script` or inline iframe injection. Instead, the service worker opens a Suite Web
+popup and communicates with it via the `externally_connectable` API. Make sure your `manifest.json` allows the Suite Web
+origin you are using to call `chrome.runtime.sendMessage`:
+
+```json
+"externally_connectable": {
+  "matches": [
+    "https://suite.trezor.io/*",
+    "https://connect.trezor.io/*",
+    "http://localhost:8000/*"
+  ]
+}
+```
+
+Use only the origins you actually need (production, staging, localhost). This allowlist is required for the popup to send
+responses back to the service worker.
+
 ## Adding your webextension to `knownHosts`
 
 To ensure your extension is displayed with its name rather than its ID, you need to open a Pull Request to include it in the `knownHosts` section of the file located at https://github.com/trezor/trezor-suite/blob/develop/packages/connect/src/data/config.ts#L17.

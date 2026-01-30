@@ -36,11 +36,8 @@ For more instructions [refer to this document](https://github.com/trezor/trezor-
 
 ## Versioning
 
-Since version 9 we are adopting a new versioning strategy. With every release, we are going to update two urls
-
-For those who like to have more control over their dependencies, there will be also a new url created in form of https://connect.trezor.io/9.1../trezor-connect.js. Please note that these endpoints will not receive any further updates including security updates.
-
-Version 9 is available as `@trezor/connect` and `@trezor/connect-web` npm packages.
+Since version 9 we are adopting a new versioning strategy. Version 9+ is distributed as `@trezor/connect` and
+`@trezor/connect-web` npm packages. Hosted script endpoints are deprecated and no longer updated.
 
 ### Major version
 
@@ -61,19 +58,7 @@ Everything else that does not fall under major or minor version.
 
 ## Version 8 (legacy)
 
-Legacy version 8 is accessible from url https://connect.trezor.io/8/trezor-connect.js.
-
-Version 8 is available as `trezor-connect` npm package.
-
-If you would like to find out which version is deployed precisely simply run:
-
-`curl -s https://connect.trezor.io/8/trezor-connect.js | grep VERSION`
-
-With regards to this repo - All updates should go to current version branch, the previous releases are in corresponding branches. The gh-pages is the same older version, that is used at trezor.github.io/connect/connect.js, and it's there for backwards compatibility; please don't touch.
-
-For deployment process of trezor-connect v8 refer to [trezor/connect repository](https://github.com/trezor/connect/blob/develop/docs/deployment/index.md)
-
-Version 8 will go offline by the end of 2023.
+Version 8 is legacy and no longer maintained. Use the npm packages listed above for all current integrations.
 
 ## Docs
 

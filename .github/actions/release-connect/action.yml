@@ -89,18 +89,8 @@ runs:
       run: |
         echo "DEPLOY_PATH is set to ${DEPLOY_PATH}"
         mkdir -p tmp_build_directory
-        cp -R ./packages/connect-web/build/* tmp_build_directory/
         cp -R ./packages/connect-explorer/build/* tmp_build_directory/
         aws s3 sync --delete tmp_build_directory/ "${DEPLOY_PATH}"
-
-    - name: Build connect-examples webextension
-      if: inputs.buildArtifacts == 'true'
-      shell: bash
-      env:
-        FULL_URL: https://${{ inputs.serverHostname }}/${{ inputs.serverPath }}/
-      run: |
-        echo "FULL_URL is set to ${FULL_URL}"
-        node ./packages/connect-examples/update-webextensions-sw.js --trezor-connect-src "${FULL_URL}"
 
     - name: Build connect-explorer-webextension
       if: inputs.buildArtifacts == 'true'
@@ -110,14 +100,6 @@ runs:
         __TREZOR_CONNECT_SRC: https://${{ inputs.serverHostname }}/${{ inputs.serverPath }}/
       run: |
         yarn workspace @trezor/connect-explorer build:webextension
-
-    - name: Upload connect-example webextension artifacts
-      if: inputs.uploadArtifacts == 'true'
-      uses: actions/upload-artifact@v4
-      with:
-        name: connect-example-webextension-${{ inputs.serverHostname }}
-        path: |
-          packages/connect-examples/webextension-mv3-sw/build
 
     - name: Upload connect-explorer webextension artifacts
       if: inputs.uploadArtifacts == 'true'

@@ -287,12 +287,18 @@ export const SectionCard = styled(TrezorCard)`
         "background": {
             "service_worker": "service-worker.js"
         },
-        "permissions": ["scripting"],
-        "host_permissions": [
-            "*://connect.trezor.io/9/*"
-        ]
+        "externally_connectable": {
+            "matches": [
+                "https://suite.trezor.io/*",
+                "https://connect.trezor.io/*",
+                "http://localhost:8000/*"
+            ]
+        }
     }
     ```
+
+    The popup flow no longer relies on `connect-script` or iframe injection. The Suite Web popup communicates with the
+    service worker via `externally_connectable`, so only include the origins you actually use (production, staging, local).
 
 </SectionCard>
 
