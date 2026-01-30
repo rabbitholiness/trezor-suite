@@ -11,8 +11,6 @@ Run the commands below in order to get the MV3 webextension ready to be loaded i
 
 - `yarn`
 - `yarn build:libs`
-- `yarn workspace @trezor/connect-web build:webextension`
-- `yarn workspace @trezor/connect-web build:inline`
 - `node packages/connect-examples/update-webextensions.js`
 
 ## Browsers

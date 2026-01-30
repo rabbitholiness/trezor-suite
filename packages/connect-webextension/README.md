@@ -81,9 +81,8 @@ To ensure your extension is displayed with its name rather than its ID, you need
 
 ## Development
 
-- `yarn`
-- `yarn build:libs`
-- `yarn workspace @trezor/connect-webextension build`
+For dev, please check
 
-After completing these steps, you can import from @trezor/connect-webextension or directly use the built file `build/trezor-connect-webextension.js`.
-The popup will run on your localhost, and you can specify it in the `TrezorConnect.init({ connectSrc: ... })`.
+```
+yarn workspace @trezor/connect-explorer build:webextension
+```

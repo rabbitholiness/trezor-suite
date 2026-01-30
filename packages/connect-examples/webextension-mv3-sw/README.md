@@ -10,7 +10,6 @@ Run the commands below in order to get the webextension ready to be loaded in th
 
 - `yarn`
 - `yarn build:libs`
-- `yarn workspace @trezor/connect-webextension build`
 - `node packages/connect-examples/update-webextensions-sw.js`
 
 This extension is super simple and only reacts to "reload" button.

@@ -20,12 +20,9 @@
         "serviceworker",
         "webextension"
     ],
-    "main": "build/trezor-connect-webextension.js",
+    "main": "lib/index.js",
     "types": "src/index.ts",
     "files": [
-        "build/trezor-connect-webextension.js",
-        "build/trezor-connect-webextension.min.js",
-        "build/content-script.js",
         "lib/",
         "!lib/proxy",
         "libESM/"
